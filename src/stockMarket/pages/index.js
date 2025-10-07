@@ -1,2 +1,4 @@
 
-export * from './stockMarketPage'
+export * from './StockMarketPage'
+export * from './PredictionsPage'
+export * from './PricesPage'

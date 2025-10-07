@@ -13,11 +13,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['Home', 'Predictions', 'Prices'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
+
 export function ResponsiveAppBar() {
+  const location = useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -86,17 +89,36 @@ export function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-                </MenuItem>
-              ))}
+              
+                {pages.map((page) => {
+                  const to = page === 'Home' ? '/' : `/${page.toLowerCase()}`;
+          
+                  return (
+                    <MenuItem
+                      key={page}
+                      component={RouterLink}
+                      to={to}
+                      onClick={handleCloseNavMenu}
+                      
+                    >
+                      <Typography
+                        sx={{
+                          textAlign: "center",
+                          fontWeight: location.pathname === to ? 'bold' : 'normal',
+                          color: location.pathname === to ? 'primary.main' : 'inherit'
+                        }}
+                      >
+                        {page}
+                      </Typography>
+                    </MenuItem>
+                  );
+                })}
+
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <TrendingUpIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} fontSize="large" />
           <Typography
             variant="h5"
-            noWrap
             component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
@@ -110,18 +132,29 @@ export function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Stock Market Predictor
           </Typography>
+
+          {/* buttons on top menu for different pages */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+
+            {pages.map((page) => {
+              const to = page === 'Home' ? '/' : `/${page.toLowerCase()}`;
+              const isActive = location.pathname === to;
+              return (
+                <Button
+                  key={page}
+                  component={RouterLink}
+                  to={to}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: isActive ? 'yellow' : 'white',
+                    fontWeight: isActive ? 'bold' : 'normal', display: 'block' }}
+                >
+                  {page}
+                </Button>
+              );
+            })}
+
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
